@@ -3,13 +3,11 @@ package com.mgbt.apirestspringmysql.controller;
 import com.mgbt.apirestspringmysql.entity.Product;
 import com.mgbt.apirestspringmysql.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("products/")
 public class ProductController {
 
@@ -17,40 +15,40 @@ public class ProductController {
     IProductService productService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Product>> findAllProducts() {
+    public List<Product> findAllProducts() {
         List<Product> products = productService.findAll();
-        return ResponseEntity.ok(products);
+        return products;
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Product> findById(@PathVariable(name = "id") int id) {
+    public Product findById(@PathVariable(name = "id") int id) {
         Product product = productService.findProduct(id);
-        return ResponseEntity.ok(product);
+        return product;
     }
 
     @GetMapping("/find/")
-    public ResponseEntity<List<Product>> findByCategory(@RequestParam(name = "category") String category) {
+    public List<Product> findByCategory(@RequestParam(name = "category") String category) {
         List<Product> products = productService.findProductByCategory(category);
-        return ResponseEntity.ok(products);
+        return products;
     }
 
-    @PostMapping("/post/")
-    public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
+    @PostMapping("/")
+    public Product saveProduct(@RequestBody Product product) {
         product = productService.saveProduct(product);
-        return ResponseEntity.ok(product);
+        return product;
     }
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable(name = "id") int id, @RequestBody Product product) {
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable(name = "id") int id, @RequestBody Product product) {
         product.setIdProduct(id);
         productService.saveProduct(product);
-        return ResponseEntity.ok(product);
+        return product;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id, Product product) {
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable(name = "id") int id, Product product) {
         product.setIdProduct(id);
         productService.deleteProduct(product);
-        return ResponseEntity.ok("Product removed successfully");
+        return "Product removed successfully";
     }
 }
